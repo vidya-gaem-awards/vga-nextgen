@@ -1,11 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "vidya-gaem-awards/vga-nextgen",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "The next generation of the Vidya Gaem Awards website.",
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",

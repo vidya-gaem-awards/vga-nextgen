@@ -1,0 +1,16 @@
+name: vga-nextgen
+recipe: laravel
+config:
+  webroot: public
+  php: 8.2
+  xdebug: 'develop,debug'
+
+services:
+  appserver:
+    overrides:
+      environment:
+        PHP_IDE_CONFIG: "serverName=lando"
+        XDEBUG_SESSION_START: lando
+
+  phpmyadmin:
+    type: phpmyadmin
