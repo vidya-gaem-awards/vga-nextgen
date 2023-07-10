@@ -5,8 +5,10 @@ namespace App\Importers;
 use App\Models\Award;
 use App\Models\Nominee;
 use App\Models\Show;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Silber\Bouncer\BouncerFacade;
 
 class Vga2011 extends Importer
 {
@@ -62,6 +64,51 @@ class Vga2011 extends Importer
                     'result' => $original['ranking'] ?: null,
                 ]
             );
+        }
+    }
+
+    public function permissions(): void
+    {
+        BouncerFacade::scope()->onceTo($this->show->id, function () {
+            $admin = BouncerFacade::role()->firstOrCreate(['name' => 'admin']);
+
+            $abilities = ['feedback', 'results', 'secretclub', 'special'];
+            foreach ($abilities as $ability) {
+                $_ability = BouncerFacade::ability()->firstOrCreate(['name' => $ability]);
+                BouncerFacade::allow($admin)->to($_ability);
+            }
+        });
+    }
+
+    public function users(): void
+    {
+        $users = $this->query(<<<SQL
+            SELECT users.*, GROUP_CONCAT(Privilege) as Privileges FROM users
+            JOIN user_rights
+                ON users.SteamID = user_rights.UserID
+            GROUP BY users.SteamID
+        SQL);
+
+        foreach ($users as $row) {
+            $user = User::updateOrCreate(
+                [
+                    'steam_id' => $row['steam_id'],
+                ],
+                [
+                    'name' => $row['name'],
+                ]
+            );
+
+            BouncerFacade::scope()->onceTo($this->show->id, function () use ($user, $row) {
+                $privileges = explode(',', $row['privileges']);
+                foreach ($privileges as $privilege) {
+                    if ($privilege === 'admin') {
+                        BouncerFacade::assign($privilege)->to($user);
+                    } else {
+                        BouncerFacade::allow($user)->to($privilege);
+                    }
+                }
+            });
         }
     }
 }

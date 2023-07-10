@@ -4,7 +4,10 @@ namespace App\Importers;
 
 use App\Models\Award;
 use App\Models\Nominee;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Silber\Bouncer\BouncerFacade;
+use Silber\Bouncer\Database\Ability;
 
 class Vga2017 extends Vga2016
 {
@@ -59,6 +62,39 @@ class Vga2017 extends Vga2016
                     'result' => $placement
                 ]);
             }
+        }
+    }
+
+    public function users(): void
+    {
+        $users = $this->query(<<<SQL
+            SELECT users.*, GROUP_CONCAT(permissionID) as permissions FROM users
+            LEFT JOIN user_permissions ON users.id = user_permissions.userID
+            WHERE special = 1
+            GROUP BY users.id
+        SQL);
+
+        foreach ($users as $row) {
+            $user = User::updateOrCreate(
+                [
+                    'steam_id' => $row['username'],
+                ],
+                [
+                    'name' => $row['name'],
+                    'avatar' => $row['avatar'],
+                ]
+            );
+
+            BouncerFacade::scope()->onceTo($this->show->id, function () use ($user, $row) {
+                $permissions = explode(',', $row['permissions']);
+                foreach ($permissions as $permission) {
+                    if (str_starts_with(strtolower($permission), 'level')) {
+                        BouncerFacade::assign($permission)->to($user);
+                    } else {
+                        BouncerFacade::allow($user)->to($permission);
+                    }
+                }
+            });
         }
     }
 }

@@ -19,6 +19,8 @@ abstract class Importer
 
     protected static ?string $resultFilter = null;
 
+    protected static Collection $awards;
+
     public function __construct()
     {
         $database = 'vga_' . $this->year();
@@ -60,6 +62,15 @@ abstract class Importer
     public function results(): void
     {
     }
+
+    public function users(): void
+    {
+    }
+
+    public function permissions(): void
+    {
+    }
+
 
     /**
      * Converts a column name from its original form into snake_case.

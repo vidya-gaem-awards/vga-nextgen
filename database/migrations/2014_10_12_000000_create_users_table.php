@@ -14,11 +14,18 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('steam_id')->nullable();
+            $table->string('discord_id')->nullable();
+            $table->string('primary_connection')->nullable();
+            $table->string('avatar')->nullable();
+            $table->timestamp('first_login')->nullable();
+            $table->timestamp('last_login')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+
+            $table->unique('steam_id');
+            $table->unique('discord_id');
         });
     }
 

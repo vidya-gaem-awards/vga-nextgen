@@ -52,7 +52,13 @@ class ImportLegacyDatabase extends Command
 
         /** @var Importer $importer */
         $importer = new $class();
+        $this->info("Awards");
         $importer->awards();
+        $this->info("Nominees");
         $importer->nominees();
+        $this->info("Permissions");
+        $importer->permissions();
+        $this->info("Users");
+        $importer->users();
     }
 }
