@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Ability;
 use Silber\Bouncer\Database\Role;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class Vga2012 extends Vga2011
 {
@@ -148,6 +149,70 @@ class Vga2012 extends Vga2011
                     }
                 }
             });
+        }
+    }
+
+    public function files(): void
+    {
+        $nominees = $this->query('SELECT * FROM nominees');
+
+        foreach ($nominees as $row) {
+            $nominee = $this->show->nominees
+                ->where('slug', $row['nominee_id'])
+                ->where('award.slug', $row['category_id'])
+                ->first();
+
+            if (!$nominee || $nominee->votingImage) {
+                continue;
+            }
+
+            if (!$row['image'] && $this->show->year === '2012') {
+                $url = sprintf(
+                    "https://%d.vidyagaemawards.com/nominees/%s.png",
+                    $this->show->year,
+                    $row['nominee_id'],
+                );
+            } elseif (!$row['image']) {
+                $url = sprintf(
+                    "https://%d.vidyagaemawards.com/assets/nominees/%s.png",
+                    $this->show->year,
+                    $row['nominee_id'],
+                );
+            } elseif (str_starts_with($row['image'], 'http')) {
+                $url = $row['image'];
+            } else {
+                $url = sprintf(
+                    "https://%d.vidyagaemawards.com/%s",
+                    $this->show->year,
+                    ltrim($row['image'], '/'),
+                );
+            }
+
+            try {
+                $nominee->addMediaFromUrl($url)->toMediaCollection('voting-image');
+            } catch (UnreachableUrl) {
+                // ignore if file doesn't exist
+            }
+        }
+
+        $awards = $this->query('SELECT * FROM categories WHERE enabled = 1');
+
+        foreach ($awards as $row) {
+            $award = $this->show->awards
+                ->where('slug', $row['id'])
+                ->first();
+
+            if (!$award || $award->winnerImage) {
+                continue;
+            }
+
+            $url = sprintf(
+                "https://%d.vidyagaemawards.com/assets/winners/%s.png",
+                $this->show->year,
+                $row['id']
+            );
+
+            $award->addMediaFromUrl($url)->toMediaCollection('winner-image');
         }
     }
 }

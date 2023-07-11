@@ -56,6 +56,8 @@ class ImportLegacyDatabase extends Command
         $importer->awards();
         $this->info("Nominees");
         $importer->nominees();
+        $this->info("Files");
+        $importer->files();
         $this->info("Permissions");
         $importer->permissions();
         $this->info("Users");

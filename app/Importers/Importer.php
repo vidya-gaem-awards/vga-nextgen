@@ -71,6 +71,10 @@ abstract class Importer
     {
     }
 
+    public function files(): void
+    {
+    }
+
 
     /**
      * Converts a column name from its original form into snake_case.

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Silber\Bouncer\BouncerFacade;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class Vga2011 extends Importer
 {
@@ -109,6 +110,54 @@ class Vga2011 extends Importer
                     }
                 }
             });
+        }
+    }
+
+    public function files(): void
+    {
+        $nominees = $this->query(<<<SQL
+            SELECT nominees.*, categories.type
+            FROM nominees
+            JOIN categories ON nominees.CategoryID = categories.ID
+        SQL);
+
+        foreach ($nominees as $row) {
+            $nominee = $this->show->nominees
+                ->where('slug', $row['nominee'])
+                ->where('award.slug', $row['category_id'])
+                ->first();
+
+            if (!$nominee || $nominee->votingImage) {
+                continue;
+            }
+
+            // The 2011 site had this annoying thing where an image could be in one of three
+            // locations, and the only way to tell which one was used is to check if the
+            // file exists.
+            //
+            // Luckily, the third option was never used, so we only have to check two.
+            $urls = [
+                sprintf(
+                    "https://%d.vidyagaemawards.com/images/nominees/%s-%s.png",
+                    $this->show->year,
+                    mb_strtolower($row['category_id']),
+                    $row['nominee'],
+                ),
+                sprintf(
+                    "https://%d.vidyagaemawards.com/images/nominees/%s-%s.png",
+                    $this->show->year,
+                    $row['type'],
+                    $row['nominee'],
+                ),
+            ];
+
+            foreach ($urls as $url) {
+                try {
+                    $nominee->addMediaFromUrl($url)->toMediaCollection('voting-image');
+                } catch (UnreachableUrl) {
+                    // ignore if file doesn't exist
+                }
+            }
         }
     }
 }

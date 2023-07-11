@@ -144,4 +144,48 @@ class Vga2015 extends Vga2014
             });
         }
     }
+
+    public function files(): void
+    {
+        $nominees = $this->query('SELECT * FROM nominees');
+
+        foreach ($nominees as $row) {
+            $nominee = $this->show->nominees
+                ->where('slug', $row['short_name'])
+                ->where('award.slug', $row['category_id'])
+                ->first();
+
+            if (!$nominee || $nominee->votingImage) {
+                continue;
+            }
+
+            $url = sprintf(
+                "https://%d.vidyagaemawards.com/%s",
+                $this->show->year,
+                ltrim($row['image'], '/'),
+            );
+
+            $nominee->addMediaFromUrl($url)->toMediaCollection('voting-image');
+        }
+
+        $awards = $this->query('SELECT * FROM categories WHERE winnerImage IS NOT NULL');
+
+        foreach ($awards as $row) {
+            $award = $this->show->awards
+                ->where('slug', $row['id'])
+                ->first();
+
+            if (!$award || $award->winnerImage) {
+                continue;
+            }
+
+            $url = sprintf(
+                "https://%d.vidyagaemawards.com/%s",
+                $this->show->year,
+                ltrim($row['winner_image'], '/')
+            );
+
+            $award->addMediaFromUrl($url)->toMediaCollection('winner-image');
+        }
+    }
 }

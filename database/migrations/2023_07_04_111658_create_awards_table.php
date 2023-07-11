@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('subtitle')->nullable();
             $table->integer('order')->default(0);
+            $table->boolean('secret')->default(false);
             $table->boolean('enabled')->default(true);
             $table->timestamps();
             $table->softDeletes();
