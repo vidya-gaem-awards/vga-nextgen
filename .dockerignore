@@ -1,0 +1,7 @@
+.env
+.git
+.idea
+/public/hot
+/storage/logs
+/node_modules
+/vendor
