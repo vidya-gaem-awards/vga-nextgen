@@ -22,7 +22,7 @@
 
 @section('content')
     <header class="jumbotron masthead text-center" style="background: none;">
-        <h1>{{ $show->name }}</h1>
+        <h1>{{ $selectedShow->name }}</h1>
         <p>&gt;implying you're opinion is worth shit</p>
     </header>
 @endsection

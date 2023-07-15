@@ -72,10 +72,19 @@ class Vga2011 extends Importer
     {
         BouncerFacade::scope()->onceTo($this->show->id, function () {
             $admin = BouncerFacade::role()->firstOrCreate(['name' => 'admin']);
+            $admin->description = 'Gives complete admin access';
+            $admin->save();
 
-            $abilities = ['feedback', 'results', 'secretclub', 'special'];
-            foreach ($abilities as $ability) {
+            $abilities = [
+                'feedback' => 'View /v/GA feedback',
+                'results' => 'View voting results',
+                'secretclub' => 'Member of the secret club',
+                'special' => 'Provides access to all team functionality'
+            ];
+            foreach ($abilities as $ability => $description) {
                 $_ability = BouncerFacade::ability()->firstOrCreate(['name' => $ability]);
+                $_ability->description = $description;
+                $_ability->save();
                 BouncerFacade::allow($admin)->to($_ability);
             }
         });

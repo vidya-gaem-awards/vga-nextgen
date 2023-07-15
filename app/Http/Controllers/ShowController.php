@@ -17,7 +17,7 @@ class ShowController extends Controller
     public function view(Show $show): View
     {
         return view('show', [
-            'show' => $show,
+            'selectedShow' => $show,
         ]);
     }
 }

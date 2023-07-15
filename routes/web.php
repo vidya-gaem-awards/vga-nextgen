@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\ShowController;
@@ -23,8 +24,6 @@ Route::get('/{show:year}', [ShowController::class, 'view'])->name('show')->where
 
 Route::get('/{show:year}/winners', [ResultsController::class, 'winners'])->name('winners');
 
-Route::get('/account', [AuthController::class, 'account'])->name('account');
-
 Route::get('/login/steam', [AuthController::class, 'loginSteam'])->name('login.steam');
 Route::get('/login/discord', [AuthController::class, 'loginDiscord'])->name('login.discord');
 Route::get('/login/steam/callback', [AuthController::class, 'callbackSteam']);
@@ -34,4 +33,4 @@ Route::post('/login/discord/first-time', [AuthController::class, 'discordFirstTi
 Route::get('/login/discord/first-time/callback', [AuthController::class, 'discordFirstTimeCallback'])->name('login.discord.first-time.callback');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/account/connect/steam', [AuthController::class, 'connectSteam'])->name('account.connect.steam');
+Route::get('/account', [AccountController::class, 'account'])->name('account');

@@ -3,8 +3,8 @@
 @section('body')
     <nav class="navbar fixed-top navbar-expand-md navbar-light bg-yotsuba">
         <div class="container">
-            @isset($show)
-                <a class="navbar-brand" href="{{ route('show', ['show' => $show]) }}">{{ $show->year }} /v/GAs</a>
+            @isset($selectedShow)
+                <a class="navbar-brand" href="{{ route('show', ['show' => $selectedShow]) }}">{{ $selectedShow->year }} /v/GAs</a>
             @else
                 <a class="navbar-brand" href="{{ route('shows') }}">/v/GAs</a>
             @endif
@@ -13,10 +13,10 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarCollapsed">
-                @isset($show)
+                @isset($selectedShow)
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item {{ Route::current()->getName() == 'winners' ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('winners', ['show' => $show]) }}">Winners</a>
+                            <a class="nav-link" href="{{ route('winners', ['show' => $selectedShow]) }}">Winners</a>
                         </li>
                     </ul>
                 @endif
@@ -83,8 +83,8 @@
                     </li>
                     @auth
                         <li class="nav-item">
-                            @isset($show)
-                                <a class="nav-link" href="{{ route('logout', ['redirect' => route('show', ['show' => $show])]) }}">Logout</a>
+                            @isset($selectedShow)
+                                <a class="nav-link" href="{{ route('logout', ['redirect' => route('show', ['show' => $selectedShow])]) }}">Logout</a>
                             @else
                                 <a class="nav-link" href="{{ route('logout', ['redirect' => route('shows')]) }}">Logout</a>
                             @endif

@@ -9,6 +9,6 @@ class ResultsController extends Controller
 {
     public function winners(Show $show)
     {
-        return view('winners', ['show' => $show]);
+        return view('winners', ['selectedShow' => $show]);
     }
 }
