@@ -37,6 +37,7 @@ return [
         'redirect' => env('STEAM_REDIRECT_URI', '/login/steam/callback'),
         'allowed_hosts' => [
             'vidyagaemawards.com',
+            'beta.vidyagaemawards.com',
             'vga-nextgen.lndo.site'
         ]
     ],
