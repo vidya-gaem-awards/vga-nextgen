@@ -29,3 +29,8 @@ ENV GIT_BRANCH=$BRANCH
 ENV GIT_COMMIT=$COMMIT
 ENV GIT_REF=$REF
 ENV GIT_RUN_NUMBER=$RUN_NUMBER
+
+COPY --link ".docker/entrypoint.sh" "/vga-entrypoint.sh"
+RUN chmod +x "/vga-entrypoint.sh"
+ENTRYPOINT ["/vga-entrypoint.sh"]
+CMD ["supervisord"]
