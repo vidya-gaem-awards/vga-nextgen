@@ -26,4 +26,11 @@
             @endforeach
         </dl>
     @endforeach
+
+    <form method="post">
+        @csrf
+        <input type="radio" id="status_1" name="status" value=1 class="form-check-input" required {{ old("status") === "1" ? 'checked' : '' }}>
+        <input type="radio" id="status_2" name="status" value=2 class="form-check-input" required {{ old("status") === "2" ? 'checked' : '' }}>
+        <input type="submit" />
+    </form>
 @endsection

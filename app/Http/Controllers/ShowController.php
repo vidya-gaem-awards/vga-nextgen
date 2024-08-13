@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Show;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ShowController extends Controller

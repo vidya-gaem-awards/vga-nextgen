@@ -28,6 +28,8 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        Route::pattern('show', '20[0-9]{2}');
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

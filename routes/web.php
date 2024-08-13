@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Team;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\ShowController;
 use Illuminate\Support\Facades\Route;
@@ -18,12 +19,18 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
+Route::prefix('/{show:year}')->group(function () {
+    Route::get('/', [ShowController::class, 'view'])->name('show');
+    Route::get('/winners', [ResultsController::class, 'winners'])->name('winners');
+
+    Route::prefix('/t')->name('team.')->group(function () {
+        Route::get('/awards', [Team\AwardController::class, 'index'])->name('awards');
+    });
+});
+
 Route::get('/', [ShowController::class, 'shows'])->name('shows');
 
-Route::get('/{show:year}', [ShowController::class, 'view'])->name('show')->where('show', '[0-9]{4}');
-
-Route::get('/{show:year}/winners', [ResultsController::class, 'winners'])->name('winners');
-
+// Authentication
 Route::get('/login/steam', [AuthController::class, 'loginSteam'])->name('login.steam');
 Route::get('/login/discord', [AuthController::class, 'loginDiscord'])->name('login.discord');
 Route::get('/login/steam/callback', [AuthController::class, 'callbackSteam']);
@@ -34,3 +41,4 @@ Route::get('/login/discord/first-time/callback', [AuthController::class, 'discor
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/account', [AccountController::class, 'account'])->name('account');
+Route::post('/account', [AccountController::class, 'post'])->name('account');

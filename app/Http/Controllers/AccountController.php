@@ -35,4 +35,11 @@ class AccountController extends Controller
             'permissions' => $permissions,
         ]);
     }
+
+    public function post(Request $request)
+    {
+        $request->validate([
+            'yes' => 'required'
+        ]);
+    }
 }

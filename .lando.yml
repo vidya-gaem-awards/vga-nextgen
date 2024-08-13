@@ -14,3 +14,8 @@ services:
 
   phpmyadmin:
     type: phpmyadmin
+
+proxy:
+  appserver:
+    - vga-nextgen.lndo.site
+    - "*.vga-nextgen.lndo.site"

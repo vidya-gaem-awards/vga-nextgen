@@ -56,6 +56,7 @@ return [
     */
 
     'url' => env('APP_URL', 'https://vidyagaemawards.com'),
+    'base_url' => env('APP_BASE_URL', env('APP_URL')),
 
     'asset_url' => env('ASSET_URL'),
 
