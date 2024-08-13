@@ -1,4 +1,4 @@
-FROM webdevops/php-nginx:8.2-alpine as base
+FROM webdevops/php-nginx:8.3-alpine as base
 ENV WEB_DOCUMENT_ROOT=/app/public
 
 WORKDIR /app
@@ -7,7 +7,7 @@ RUN composer install --no-interaction --optimize-autoloader --no-scripts
 COPY . .
 RUN php artisan optimize
 
-FROM node:18-alpine as vite-build
+FROM node:20-alpine as vite-build
 
 WORKDIR /app
 COPY --link package*.json vite.config.js ./
