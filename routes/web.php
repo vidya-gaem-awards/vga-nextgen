@@ -8,17 +8,6 @@ use App\Http\Controllers\ShowController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::prefix('/{show:year}')->group(function () {
     Route::get('/', [ShowController::class, 'view'])->name('show');
     Route::get('/winners', [ResultsController::class, 'winners'])->name('winners');
@@ -41,4 +30,4 @@ Route::get('/login/discord/first-time/callback', [AuthController::class, 'discor
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/account', [AccountController::class, 'account'])->name('account');
-Route::post('/account', [AccountController::class, 'post'])->name('account');
+Route::post('/account', [AccountController::class, 'post'])->name('account.submit');

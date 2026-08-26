@@ -11,7 +11,7 @@ class SteamExtendSocialite extends \SocialiteProviders\Steam\SteamExtendSocialit
      *
      * @param SocialiteWasCalled $socialiteWasCalled
      */
-    public function handle(SocialiteWasCalled $socialiteWasCalled)
+    public function handle(SocialiteWasCalled $socialiteWasCalled): void
     {
         $socialiteWasCalled->extendSocialite('steam', SteamProvider::class);
     }

@@ -2,7 +2,7 @@ name: vga-nextgen
 recipe: laravel
 config:
   webroot: public
-  php: 8.2
+  php: 8.5
   xdebug: 'develop,debug'
 
 services:
@@ -15,7 +15,18 @@ services:
   phpmyadmin:
     type: phpmyadmin
 
+  adminer:
+    type: compose
+    services:
+      image: dehy/adminer
+      command: /bin/s6-svscan /etc/services.d
+    portforward: true
+
 proxy:
   appserver:
     - vga-nextgen.lndo.site
     - "*.vga-nextgen.lndo.site"
+  phpmyadmin:
+    - pma.vga-nextgen.lndo.site
+  adminer:
+    - adminer.vga-nextgen.lndo.site

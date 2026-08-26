@@ -6,7 +6,7 @@ use SocialiteProviders\Steam\Provider;
 
 class SteamProvider extends Provider
 {
-    protected function getAuthUrl($state)
+    protected function getAuthUrl($state): string
     {
         return $this->buildUrl();
     }
